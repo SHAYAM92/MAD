@@ -1,0 +1,1531 @@
+//HELLOWORLD
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"/#FFE5B4/#AEC6CF
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+--
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.mode"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.mode"
+        minSdk = 21
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+
+    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+}
+
+//TITLE+SEARCH_BAR
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Cool App "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search here..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.Toast
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val searchBar = findViewById<EditText>(R.id.searchBar)
+
+        // Add action listener for when user presses "Search" or "Enter"
+        searchBar.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                val searchText = searchBar.text.toString()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this, "Searching for: $searchText", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Type something first", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+    }
+}
+
+//Sideheading+Images+Button(TOAST)
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Cool App "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search here..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Side Title -->
+    <TextView
+        android:id="@+id/imagesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Images"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#333"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Row of Images with Labels using LinearLayout -->
+    <LinearLayout
+        android:id="@+id/imageRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/imagesTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Image 1 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img"
+                android:contentDescription="Product 1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 1"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 2 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_1"
+                android:contentDescription="Product 2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 3 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_2"
+                android:contentDescription="Product 3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Button for Toast -->
+    <Button
+        android:id="@+id/toastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Toast"
+        app:layout_constraintTop_toBottomOf="@id/imageRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.Toast
+import android.widget.Button
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val searchBar = findViewById<EditText>(R.id.searchBar)
+
+        // Add action listener for when user presses "Search" or "Enter"
+        searchBar.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                val searchText = searchBar.text.toString()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this, "Searching for: $searchText", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Type something first", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        val toastButton = findViewById<Button>(R.id.toastButton)
+        toastButton.setOnClickListener {
+            Toast.makeText(this, "You created a toast msg", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+}
+
+//OPTION MENU+SHRED PREF
+
+//Themes:
+parent="Theme.MaterialComponents.DayNight.DarkActionBar"
+
+//menu_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_profile"
+        android:title="Profile" />
+    <item android:id="@+id/menu_settings"
+        android:title="Settings" />
+    <item android:id="@+id/menu_about"
+        android:title="About" />
+</menu>
+
+//xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Cool App "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search here..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Side Title -->
+    <TextView
+        android:id="@+id/imagesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Images"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#333"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Row of Images with Labels using LinearLayout -->
+    <LinearLayout
+        android:id="@+id/imageRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/imagesTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Image 1 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img"
+                android:contentDescription="Product 1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 1"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 2 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_1"
+                android:contentDescription="Product 2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 3 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_2"
+                android:contentDescription="Product 3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Button for Toast -->
+    <Button
+        android:id="@+id/toastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Toast"
+        app:layout_constraintTop_toBottomOf="@id/imageRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Input for ID -->
+    <EditText
+        android:id="@+id/idInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter ID"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/toastButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Input for Name -->
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/idInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Button Row: Save, View, Clear -->
+    <LinearLayout
+        android:id="@+id/btnRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/nameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/viewBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/outputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Output will show here"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/btnRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import android.widget.Button
+
+import android.view.Menu
+import android.view.MenuItem
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val searchBar = findViewById<EditText>(R.id.searchBar)
+
+        // Add action listener for when user presses "Search" or "Enter"
+        searchBar.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                val searchText = searchBar.text.toString()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this, "Searching for: $searchText", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Type something first", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        val toastButton = findViewById<Button>(R.id.toastButton)
+        toastButton.setOnClickListener {
+            Toast.makeText(this, "You created a toast msg", Toast.LENGTH_SHORT).show()
+        }
+
+        val idInput = findViewById<EditText>(R.id.idInput)
+        val nameInput = findViewById<EditText>(R.id.nameInput)
+
+        val saveBtn = findViewById<Button>(R.id.saveBtn)
+        val viewBtn = findViewById<Button>(R.id.viewBtn)
+        val clearBtn = findViewById<Button>(R.id.clearBtn)
+
+        val prefs = getSharedPreferences("MyData", MODE_PRIVATE)
+
+        saveBtn.setOnClickListener {
+            val id = idInput.text.toString()
+            val name = nameInput.text.toString()
+            if (id.isNotEmpty() && name.isNotEmpty()) {
+                prefs.edit().putString("id", id).putString("name", name).apply()
+                Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewBtn.setOnClickListener {
+            val id = prefs.getString("id", "N/A")
+            val name = prefs.getString("name", "N/A")
+            val outputText = findViewById<TextView>(R.id.outputText)
+            outputText.text = "ID: $id\nName: $name"
+
+        }
+
+        clearBtn.setOnClickListener {
+            prefs.edit().clear().apply()
+            idInput.text.clear()
+            nameInput.text.clear()
+            Toast.makeText(this, "Data Cleared", Toast.LENGTH_SHORT).show()
+        }
+
+
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_profile -> Toast.makeText(this, "Profile Clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_settings -> Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_about -> Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+}
+
+//INTENT ON CLICK
+
+//xml1
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Cool App "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search here..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Side Title -->
+    <TextView
+        android:id="@+id/imagesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Images"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#333"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Row of Images with Labels using LinearLayout -->
+    <LinearLayout
+        android:id="@+id/imageRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/imagesTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Image 1 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img"
+                android:contentDescription="Product 1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 1"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 2 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_1"
+                android:contentDescription="Product 2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 3 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_2"
+                android:contentDescription="Product 3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Button for Toast -->
+    <Button
+        android:id="@+id/toastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Toast"
+        app:layout_constraintTop_toBottomOf="@id/imageRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Input for ID -->
+    <EditText
+        android:id="@+id/idInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter ID"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/toastButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Input for Name -->
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/idInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Button Row: Save, View, Clear -->
+    <LinearLayout
+        android:id="@+id/btnRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/nameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/viewBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/outputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Output will show here"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/btnRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+//kt1
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import android.widget.Button
+
+import android.view.Menu
+import android.view.MenuItem
+
+import android.content.Intent // for navigation between activities
+
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val searchBar = findViewById<EditText>(R.id.searchBar)
+
+        // Add action listener for when user presses "Search" or "Enter"
+        searchBar.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                val searchText = searchBar.text.toString()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this, "Searching for: $searchText", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Type something first", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        val toastButton = findViewById<Button>(R.id.toastButton)
+        toastButton.setOnClickListener {
+            Toast.makeText(this, "You created a toast msg", Toast.LENGTH_SHORT).show()
+        }
+
+        val idInput = findViewById<EditText>(R.id.idInput)
+        val nameInput = findViewById<EditText>(R.id.nameInput)
+
+        val saveBtn = findViewById<Button>(R.id.saveBtn)
+        val viewBtn = findViewById<Button>(R.id.viewBtn)
+        val clearBtn = findViewById<Button>(R.id.clearBtn)
+
+        val prefs = getSharedPreferences("MyData", MODE_PRIVATE)
+
+        saveBtn.setOnClickListener {
+            val id = idInput.text.toString()
+            val name = nameInput.text.toString()
+            if (id.isNotEmpty() && name.isNotEmpty()) {
+                prefs.edit().putString("id", id).putString("name", name).apply()
+                Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewBtn.setOnClickListener {
+            val id = prefs.getString("id", "N/A")
+            val name = prefs.getString("name", "N/A")
+            val outputText = findViewById<TextView>(R.id.outputText)
+            outputText.text = "ID: $id\nName: $name"
+
+        }
+
+        clearBtn.setOnClickListener {
+            prefs.edit().clear().apply()
+            idInput.text.clear()
+            nameInput.text.clear()
+            Toast.makeText(this, "Data Cleared", Toast.LENGTH_SHORT).show()
+        }
+
+
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_profile -> {
+                val intent = Intent(this, MainActivity2::class.java)
+                startActivity(intent)
+            }
+            R.id.menu_settings -> Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_about -> Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+}<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+//kt2
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.TextView
+
+class MainActivity2 : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main2)
+
+        val welcomeText = findViewById<TextView>(R.id.welcomeText)
+        welcomeText.text = "Welcome"
+    }
+}
+
+//
+--
+//xml2
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+//POPUP_MENU+CONTEXT_MENU
+
+//popup_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/popup_item1" android:title="Option 1" />
+    <item android:id="@+id/popup_item2" android:title="Option 2" />
+</menu>
+
+//context_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/context_edit" android:title="Edit" />
+    <item android:id="@+id/context_delete" android:title="Delete" />
+</menu>
+
+//kt
+package com.example.mode
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import android.widget.Button
+
+import android.view.Menu
+import android.view.MenuItem
+import android.view.ContextMenu
+import android.widget.PopupMenu
+import android.view.View
+
+import android.content.Intent // for navigation between activities
+
+
+class MainActivity : AppCompatActivity() {
+
+    lateinit var descriptionInput: EditText
+    lateinit var yesNoInput: EditText
+    lateinit var popupBtn: Button
+    lateinit var contextBtn: Button
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        yesNoInput = findViewById(R.id.yesNoInput)
+        popupBtn = findViewById(R.id.popupBtn)
+        contextBtn = findViewById(R.id.contextBtn)
+        descriptionInput = findViewById(R.id.descriptionInput)
+
+
+        val searchBar = findViewById<EditText>(R.id.searchBar)
+
+        // Add action listener for when user presses "Search" or "Enter"
+        searchBar.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                val searchText = searchBar.text.toString()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this, "Searching for: $searchText", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Type something first", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        val toastButton = findViewById<Button>(R.id.toastButton)
+        toastButton.setOnClickListener {
+            Toast.makeText(this, "You created a toast msg", Toast.LENGTH_SHORT).show()
+        }
+
+        val idInput = findViewById<EditText>(R.id.idInput)
+        val nameInput = findViewById<EditText>(R.id.nameInput)
+
+        val saveBtn = findViewById<Button>(R.id.saveBtn)
+        val viewBtn = findViewById<Button>(R.id.viewBtn)
+        val clearBtn = findViewById<Button>(R.id.clearBtn)
+
+        val prefs = getSharedPreferences("MyData", MODE_PRIVATE)
+
+        saveBtn.setOnClickListener {
+            val id = idInput.text.toString()
+            val name = nameInput.text.toString()
+            if (id.isNotEmpty() && name.isNotEmpty()) {
+                prefs.edit().putString("id", id).putString("name", name).apply()
+                Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewBtn.setOnClickListener {
+            val id = prefs.getString("id", "N/A")
+            val name = prefs.getString("name", "N/A")
+            val outputText = findViewById<TextView>(R.id.outputText)
+            outputText.text = "ID: $id\nName: $name"
+
+        }
+
+        clearBtn.setOnClickListener {
+            prefs.edit().clear().apply()
+            idInput.text.clear()
+            nameInput.text.clear()
+            Toast.makeText(this, "Data Cleared", Toast.LENGTH_SHORT).show()
+        }
+
+        popupBtn = findViewById(R.id.popupBtn)
+
+        popupBtn.setOnClickListener { view ->  // ← use a named param instead of 'it'
+            val popup = PopupMenu(this, view)
+            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                val choice = item.title.toString()
+                yesNoInput.setText(choice)
+                Toast.makeText(this, "You selected: $choice", Toast.LENGTH_SHORT).show()
+                true
+            }
+            popup.show()
+        }
+
+        registerForContextMenu(contextBtn)
+
+
+
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_profile -> {
+                val intent = Intent(this, MainActivity2::class.java)
+                startActivity(intent)
+            }
+            R.id.menu_settings -> Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_about -> Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menu.setHeaderTitle("Select Action")
+        menu.add(0, v.id, 0, "Edit")
+        menu.add(0, v.id, 1, "Delete")
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.title) {
+            "Edit" -> {
+                Toast.makeText(this, "Edit selected", Toast.LENGTH_SHORT).show()
+                descriptionInput.setText("Edited text")
+                true
+            }
+            "Delete" -> {
+                Toast.makeText(this, "Description deleted", Toast.LENGTH_SHORT).show()
+                descriptionInput.setText("")
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+    }
+
+
+
+}
+
+//xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D5F4E6"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Cool App "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search here..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Side Title -->
+    <TextView
+        android:id="@+id/imagesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Images"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#333"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Row of Images with Labels using LinearLayout -->
+    <LinearLayout
+        android:id="@+id/imageRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/imagesTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <!-- Image 1 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img"
+                android:contentDescription="Product 1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 1"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 2 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_1"
+                android:contentDescription="Product 2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 2"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Image 3 -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/img_2"
+                android:contentDescription="Product 3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product 3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Button for Toast -->
+    <Button
+        android:id="@+id/toastButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Toast"
+        app:layout_constraintTop_toBottomOf="@id/imageRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Input for ID -->
+    <EditText
+        android:id="@+id/idInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter ID"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/toastButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Input for Name -->
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/idInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Yes/No Input with Popup Menu Button -->
+    <LinearLayout
+        android:id="@+id/yesNoRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/nameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp">
+
+        <EditText
+            android:id="@+id/yesNoInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Yes or No"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/popupBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Description Input with Context Menu Button -->
+    <LinearLayout
+        android:id="@+id/descRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/yesNoRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp">
+
+        <EditText
+            android:id="@+id/descriptionInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter description"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/contextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Options"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+
+
+
+
+
+
+
+    <!-- Button Row: Save, View, Clear -->
+    <LinearLayout
+        android:id="@+id/btnRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/descRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/viewBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/outputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Output will show here"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:padding="12dp"
+        android:gravity="center"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/btnRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

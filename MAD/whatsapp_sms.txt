@@ -1,0 +1,32 @@
+WhatsApp Msg
+
+lateinit var pnoField: EditText
+
+
+inside oncreate function
+pnoField = findViewById(R.id.editTextTextMultiLine3)
+val saveButton = findViewById<Button>(R.id.button)
+saveButton.setOnClickListener {
+    sendBookingConfirmation()
+    sendSMSConfirmation()
+}
+
+
+
+private fun sendBookingConfirmation() {
+        val phoneNumber = pnoField.text.toString().trim()
+        val formattedPhone = phoneNumber.replace(Regex("[^0-9+]"), "")
+        val message = "BOOKING CONFIRMED"
+        val encodedMessage = URLEncoder.encode(message, "UTF-8")
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("https://api.whatsapp.com/send?phone=$formattedPhone&text=$encodedMessage")
+        startActivity(intent)
+}
+
+private fun sendSMSConfirmation() {
+        val phoneNumber = pnoField.text.toString().trim()
+        val message = "BOOKING CONFIRMED"
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("sms:$phoneNumber?body=${Uri.encode(message)}")
+        startActivity(intent)
+    }

@@ -1,0 +1,154 @@
+//NOTIFICATION + datetime picker
+
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+//xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <!-- Button 1: Static Notification -->
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Status Notification"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp" />
+
+    <!-- TextView: Display Selected DateTime -->
+    <TextView
+        android:id="@+id/textDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected Date &amp; Time will appear here"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:background="#EEEEEE"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/button1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Button 2: Pick Date & Time -->
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Date &amp; Time"
+        android:textAllCaps="false"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/textDateTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+--
+package com.example.modetwo
+
+import android.Manifest
+import android.app.*
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import java.util.*
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var textDateTime: TextView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+    private val CHANNEL_ID = "mode_channel_id"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textDateTime = findViewById(R.id.textDateTime)
+        button1 = findViewById(R.id.button1)
+        button2 = findViewById(R.id.button2)
+
+        createNotificationChannel()
+        requestNotificationPermission()
+
+        button1.setOnClickListener {
+            showNotification("Status Notification", "You implemented status notification 🎉")
+        }
+
+        button2.setOnClickListener {
+            pickDateTime()
+        }
+    }
+
+    private fun pickDateTime() {
+        val calendar = Calendar.getInstance()
+
+        // First Date Picker
+        DatePickerDialog(this, { _, year, month, dayOfMonth ->
+            calendar.set(year, month, dayOfMonth)
+
+            // Then Time Picker
+            TimePickerDialog(this, { _, hour, minute ->
+                calendar.set(Calendar.HOUR_OF_DAY, hour)
+                calendar.set(Calendar.MINUTE, minute)
+
+                val dateTimeStr = "${dayOfMonth}/${month + 1}/$year $hour:$minute"
+                textDateTime.text = "Selected: $dateTimeStr"
+
+                showNotification("Date & Time Selected", "You picked: $dateTimeStr")
+
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show()
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
+    private fun showNotification(title: String, message: String) {
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(Random().nextInt(9999), builder.build())
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "ModeTwo Channel"
+            val descriptionText = "Channel for ModeTwo notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+            }
+        }
+    }
+}
