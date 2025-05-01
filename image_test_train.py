@@ -1,82 +1,89 @@
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras import layers, models
-from tensorflow.keras.layers import Input
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 
-# Image dimensions
-img_height, img_width = 150, 150
+data_path = r"C:\Users\admin\Downloads\model\img"  
+img_size = (180, 180)
 batch_size = 32
 
-# Data Preprocessing and Augmentation
-train_datagen = ImageDataGenerator(
-    rescale=1./255, 
-    rotation_range=20,
-    zoom_range=0.2,
-    horizontal_flip=True,
-    validation_split=0.2)
-
-train_generator = train_datagen.flow_from_directory(
-    r'C:\Users\DIGEESH\OneDrive\Desktop\project_v1\ds lab\Animals',  # Replace with your folder
-    target_size=(img_height, img_width),
+# Load dataset
+dataset = tf.keras.utils.image_dataset_from_directory(
+    data_path,
+    image_size=img_size,
     batch_size=batch_size,
-    class_mode='categorical',  # Change here
-    subset='training')
+    shuffle=True,
+    seed=123,
+    validation_split=0.2,
+    subset="both"
+)
 
-val_generator = train_datagen.flow_from_directory(
-    r'C:\Users\DIGEESH\OneDrive\Desktop\project_v1\ds lab\Animals',
-    target_size=(img_height, img_width),
-    batch_size=batch_size,
-    class_mode='categorical',  # Change here
-    subset='validation',
-    shuffle=False)
+train_ds = dataset[0]
+val_ds = dataset[1]
+class_names = train_ds.class_names
+print("Class Names:", class_names)
 
-# Get number of classes
-num_classes = len(train_generator.class_indices)
+AUTOTUNE = tf.data.AUTOTUNE
+train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
 
-# Model Building (CNN)
-model = models.Sequential([
-    Input(shape=(img_height, img_width, 3)),  # Add Input layer
-    layers.Conv2D(32, (3,3), activation='relu'),
-    layers.MaxPooling2D(2,2),
-    layers.Conv2D(64, (3,3), activation='relu'),
-    layers.MaxPooling2D(2,2),
-    layers.Flatten(),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(num_classes, activation='softmax')  # Changed to softmax
+# Model
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Rescaling(1./255, input_shape=(180, 180, 3)),
+    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+    tf.keras.layers.MaxPooling2D(),
+    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+    tf.keras.layers.MaxPooling2D(),
+    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+    tf.keras.layers.MaxPooling2D(),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(len(class_names))  
 ])
 
-# Compile the model
-model.compile(optimizer='adam',
-              loss='categorical_crossentropy',  # Changed to categorical
-              metrics=['accuracy'])
+model.compile(
+    optimizer='adam',
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=['accuracy']
+)
 
-# Train the model
-history = model.fit(train_generator, validation_data=val_generator, epochs=10)
+model.fit(train_ds, validation_data=val_ds, epochs=5)
 
-# Plot Accuracy and Loss
-plt.plot(history.history['accuracy'], label='Train Accuracy')
-plt.plot(history.history['val_accuracy'], label='Val Accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.legend()
-plt.title('Training vs Validation Accuracy')
+model.save("rps_model.h5")
+
+y_true = []
+y_pred = []
+
+for images, labels in val_ds:
+    preds = model.predict(images)
+    y_true.extend(labels.numpy())
+    y_pred.extend(np.argmax(preds, axis=1))
+
+print("\nClassification Report:\n")
+print(classification_report(y_true, y_pred, target_names=class_names))
+
+cm = confusion_matrix(y_true, y_pred)
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
 plt.show()
 
-# Evaluate model
-val_preds = model.predict(val_generator)
-val_preds_classes = np.argmax(val_preds, axis=1)  # Get predicted class index
+while True:
+    img_path = input("Enter image path or type 'exit': ").strip()
+    if img_path.lower() == 'exit':
+        break
 
-# True labels
-true_labels = val_generator.classes
-class_labels = list(val_generator.class_indices.keys())
+    try:
+        img = tf.keras.preprocessing.image.load_img(img_path, target_size=img_size)
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        img_array = tf.expand_dims(img_array, 0) 
 
-# Classification report
-print("\nClassification Report:")
-print(classification_report(true_labels, val_preds_classes, target_names=class_labels))
-
-# Confusion matrix
-print("\nConfusion Matrix:")
-print(confusion_matrix(true_labels, val_preds_classes))
+        pred = model.predict(img_array)
+        predicted_class = class_names[np.argmax(tf.nn.softmax(pred[0]))]
+        print("Predicted Class:", predicted_class)
+    except Exception as e:
+        print("Error:", e)
